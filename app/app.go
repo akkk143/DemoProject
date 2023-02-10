@@ -8,7 +8,7 @@ import (
 	"net/http"
 )
 
-const serviceRoute = "demo/project"
+const serviceRoute = "/demo/project"
 
 var srv *http.Server
 var messages string
