@@ -62,16 +62,15 @@ func alert(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-type customeQuery struct {
-	RuleQuery          string `json:"rule_query,omitempty"`
-	Alerts             string `json:"alerts,omitempty"`
-	ResultLink         string `json:"result_link,omitempty"`
-	RuleDescription    string `json:"rule_description,omitempty"`
-	ResponseActions    string `json:"response_actions,omitempty"`
-	RuleReferences     string `json:"rule_references,omitempty"`
-	ActionGroupName    string `json:"action_group_name,omitempty"`
-	ActionSubgroupName string `json:"action_subgroup_name,omitempty"`
-	RuleIndex          string `json:"rule_index,omitempty"`
+type custom struct {
+	AlertId              string `json:"alert_id"`
+	AlertActionGroup     string `json:"alert_action_group"`
+	AlertActionSubgroup  string `json:"alert_action_subgroup"`
+	AlertActionGroupName string `json:"alert_action_group_name"`
+	KibanaBaseUrl        string `json:"kibana_base_url"`
+	RuleId               string `json:"rule_id"`
+	RuleName             string `json:"rule_name"`
+	RuleDescription      string `json:"rule_description"`
 }
 
 type test struct {
@@ -79,12 +78,12 @@ type test struct {
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
-	msg := customeQuery{}
+	msg := custom{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf("ResponseActions : %s", msg.ResponseActions)
+	str := fmt.Sprintf(msg.AlertId, msg.AlertActionGroup, msg.AlertActionSubgroup, msg.AlertActionGroupName, msg.KibanaBaseUrl, msg.RuleName, msg.RuleDescription)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
