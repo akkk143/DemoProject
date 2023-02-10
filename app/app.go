@@ -63,17 +63,17 @@ func alert(w http.ResponseWriter, r *http.Request) {
 }
 
 type custom struct {
-	AlertId              string   `json:"alert_id"`
-	AlertActionGroup     string   `json:"alert_action_group"`
-	AlertActionSubgroup  string   `json:"alert_action_subgroup"`
-	AlertActionGroupName string   `json:"alert_action_group_name"`
-	KibanaBaseUrl        string   `json:"kibana_base_url"`
-	RuleId               string   `json:"rule_id"`
-	RuleName             string   `json:"rule_name"`
-	RuleDescription      string   `json:"rule_description"`
-	TransactionName      string   `json:"transaction_name"`
-	StatusCode           string   `json:"status_code"`
-	UrlFull              []string `json:"url_full"`
+	AlertId              string `json:"alert_id"`
+	AlertActionGroup     string `json:"alert_action_group"`
+	AlertActionSubgroup  string `json:"alert_action_subgroup"`
+	AlertActionGroupName string `json:"alert_action_group_name"`
+	KibanaBaseUrl        string `json:"kibana_base_url"`
+	RuleId               string `json:"rule_id"`
+	RuleName             string `json:"rule_name"`
+	RuleDescription      string `json:"rule_description"`
+	TransactionName      string `json:"transaction_name"`
+	StatusCode           string `json:"status_code"`
+	UrlFull              string `json:"url_full"`
 }
 
 type test struct {
