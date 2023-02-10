@@ -21,7 +21,7 @@ type message struct {
 
 // Start starts the http server
 func Start() {
-	messages[0] = "Hello World!"
+	messages = append(messages, "Hello World!")
 	createServer()
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		fmt.Println(err)
@@ -78,7 +78,7 @@ func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	str := fmt.Sprintf("alert : %s \n", msg.Alerts, "ActionSubgroupName : %s \n", msg.ResponseActions, "ActionSubgroupName : %s \n", msg.ResponseActions,
 		"RuleQuery : %s \n", msg.RuleQuery, "RuleIndex : %s \n", msg.RuleIndex, "ActionGroupName : %s \n", msg.ActionGroupName, "ResultLink : %s \n", msg.ResultLink)
-	if len(messages) >= 2 {
+	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
 	messages = append(messages, str)
