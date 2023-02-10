@@ -73,12 +73,17 @@ type customeQuery struct {
 	RuleIndex          string `json:"rule_index"`
 }
 
+type test struct {
+	MyMessage string `json:"my_message"`
+}
+
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
-	msg := customeQuery{}
+	msg := test{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	log.Println(msg)
-	str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
-		msg.ResultLink, msg.ResponseActions)
+	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
+	//	msg.ResultLink, msg.ResponseActions)
+	str := fmt.Sprintf("message : %s", msg.MyMessage)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
