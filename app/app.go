@@ -76,6 +76,7 @@ type customeQuery struct {
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	msg := customeQuery{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
+	log.Println(msg)
 	str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 		msg.ResultLink, msg.ResponseActions)
 	if len(messages) > 2 {
