@@ -77,11 +77,11 @@ type custom struct {
 }
 
 type test struct {
-	MyMessage string `json:"my_message"`
+	FullUrl string `json:"full_url"`
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
-	msg := custom{}
+	msg := test{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	if err != nil {
 		messages = append(messages, err.Error())
@@ -89,7 +89,7 @@ func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.AlertId, msg.AlertActionGroup, msg.AlertActionSubgroup, msg.AlertActionGroupName, msg.KibanaBaseUrl, msg.RuleName, msg.RuleDescription, msg.UrlFull, msg.StatusCode)
+	str := fmt.Sprintf(msg.FullUrl)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
