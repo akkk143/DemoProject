@@ -71,6 +71,9 @@ type custom struct {
 	RuleId               string `json:"rule_id"`
 	RuleName             string `json:"rule_name"`
 	RuleDescription      string `json:"rule_description"`
+	TransactionName      string `json:"transaction_name"`
+	StatusCode           string `json:"status_code"`
+	UrlFull              string `json:"url_full"`
 }
 
 type test struct {
@@ -80,10 +83,13 @@ type test struct {
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	msg := custom{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
+	if err != nil {
+		messages = append(messages, err.Error())
+	}
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.AlertId, msg.AlertActionGroup, msg.AlertActionSubgroup, msg.AlertActionGroupName, msg.KibanaBaseUrl, msg.RuleName, msg.RuleDescription)
+	str := fmt.Sprintf(msg.AlertId, msg.AlertActionGroup, msg.AlertActionSubgroup, msg.AlertActionGroupName, msg.KibanaBaseUrl, msg.RuleName, msg.RuleDescription, msg.UrlFull, msg.StatusCode)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
