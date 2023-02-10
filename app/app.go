@@ -63,15 +63,15 @@ func alert(w http.ResponseWriter, r *http.Request) {
 }
 
 type customeQuery struct {
-	RuleQuery          string `json:"rule_query"`
-	Alerts             string `json:"alerts"`
-	ResultLink         string `json:"result_link"`
-	RuleDescription    string `json:"rule_description"`
-	ResponseActions    string `json:"response_actions"`
-	RuleReferences     string `json:"rule_references"`
-	ActionGroupName    string `json:"action_group_name"`
-	ActionSubgroupName string `json:"action_subgroup_name"`
-	RuleIndex          string `json:"rule_index"`
+	RuleQuery          string `json:"rule_query,omitempty"`
+	Alerts             string `json:"alerts,omitempty"`
+	ResultLink         string `json:"result_link,omitempty"`
+	RuleDescription    string `json:"rule_description,omitempty"`
+	ResponseActions    string `json:"response_actions,omitempty"`
+	RuleReferences     string `json:"rule_references,omitempty"`
+	ActionGroupName    string `json:"action_group_name,omitempty"`
+	ActionSubgroupName string `json:"action_subgroup_name,omitempty"`
+	RuleIndex          string `json:"rule_index,omitempty"`
 }
 
 type test struct {
@@ -79,12 +79,12 @@ type test struct {
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
-	msg := test{}
+	msg := customeQuery{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf("message : %s", msg.MyMessage)
+	str := fmt.Sprintf("ResponseActions : %s", msg.ResponseActions)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
