@@ -40,6 +40,7 @@ func createServer() {
 func printMsg(w http.ResponseWriter, r *http.Request) {
 	for _, m := range messages {
 		_, err := w.Write([]byte(m))
+		w.Write([]byte("\n"))
 		if err != nil {
 			log.Printf("couldnt write response error [%s]\n", err)
 		}
