@@ -33,6 +33,7 @@ func createServer() {
 	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc(serviceRoute+"/printmsg", printMsg).Methods("GET")
 	r.HandleFunc(serviceRoute+"/alert", alert).Methods("POST")
+	r.HandleFunc(serviceRoute+"/customquery/alert", customeQueryAlert).Methods("POST")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -46,6 +47,32 @@ func alert(w http.ResponseWriter, r *http.Request) {
 	msg := message{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	str := fmt.Sprintf(msg.ServiceName, msg.Reason, msg.TransactionType)
+	messages = str
+	_, err = w.Write([]byte(str))
+	if err != nil {
+		log.Printf("couldnt write response error [%s]\n", err)
+	} else {
+		log.Println(str)
+	}
+}
+
+type customeQuery struct {
+	RuleQuery          string `json:"rule_query"`
+	Alerts             string `json:"alerts"`
+	ResultLink         string `json:"result_link"`
+	RuleDescription    string `json:"rule_description"`
+	ResponseActions    string `json:"response_actions"`
+	RuleReferences     string `json:"rule_references"`
+	ActionGroupName    string `json:"action_group_name"`
+	ActionSubgroupName string `json:"action_subgroup_name"`
+	RuleIndex          string `json:"rule_index"`
+}
+
+func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
+	msg := customeQuery{}
+	err := json.NewDecoder(r.Body).Decode(&msg)
+	str := fmt.Sprintf("alert : %s \n", msg.Alerts, "ActionSubgroupName : %s \n", msg.ResponseActions, "ActionSubgroupName : %s \n", msg.ResponseActions,
+		"RuleQuery : %s \n", msg.RuleQuery, "RuleIndex : %s \n", msg.RuleIndex, "ActionGroupName : %s \n", msg.ActionGroupName, "ResultLink : %s \n", msg.ResultLink)
 	messages = str
 	_, err = w.Write([]byte(str))
 	if err != nil {
