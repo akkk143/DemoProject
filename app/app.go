@@ -78,7 +78,6 @@ type custom struct {
 
 type test struct {
 	ResultLink string `json:"result_link"`
-	msgs       string `json:"message"`
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
