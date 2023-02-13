@@ -77,7 +77,8 @@ type custom struct {
 }
 
 type test struct {
-	ResultLink string `json:"result_link,omitempty"`
+	ResultLink      string `json:"result_link,omitempty"`
+	ResponseActions string `json:"response_actions,omitempty"`
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
@@ -89,7 +90,8 @@ func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.ResultLink)
+	str := fmt.Sprintf(msg.ResultLink) + "\n"
+	str += fmt.Sprintf(msg.ResponseActions)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
