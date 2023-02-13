@@ -89,7 +89,7 @@ func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.ResultLink + msg.msgs)
+	str := fmt.Sprintf(msg.ResultLink)
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
