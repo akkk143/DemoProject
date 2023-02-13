@@ -6,12 +6,14 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
+	"strconv"
 )
 
 const serviceRoute = "/demo/project"
 
 var srv *http.Server
 var messages []string
+var count int
 
 type message struct {
 	ServiceName     string `json:"service_name"`
@@ -22,6 +24,7 @@ type message struct {
 // Start starts the http server
 func Start() {
 	messages = append(messages, "Hello World!")
+	count = 0
 	createServer()
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
 		fmt.Println(err)
@@ -40,7 +43,7 @@ func createServer() {
 func printMsg(w http.ResponseWriter, r *http.Request) {
 	for _, m := range messages {
 		_, err := w.Write([]byte(m))
-		w.Write([]byte("\n"))
+		w.Write([]byte("count : " + strconv.Itoa(count) + "\n"))
 		if err != nil {
 			log.Printf("couldnt write response error [%s]\n", err)
 		}
@@ -82,6 +85,7 @@ type test struct {
 }
 
 func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
+	count += 1
 	msg := test{}
 	err := json.NewDecoder(r.Body).Decode(&msg)
 	if err != nil {
@@ -90,7 +94,7 @@ func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
 	log.Println(msg)
 	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
 	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.ResultLink)
+	str := fmt.Sprintf(msg.ResultLink + " count : " + strconv.Itoa(count))
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
