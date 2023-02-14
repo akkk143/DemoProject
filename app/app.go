@@ -58,7 +58,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
-	messages = append(messages, body.(string))
+	messages = append(messages, fmt.Sprintf("%v", body))
 	mapstructure.Decode(body, &bodyData)
 	var api = ServiceData{}
 
@@ -87,13 +87,13 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 			}
 		}
 	}
-	str := fmt.Sprint(api.APIUrl, api.StatusCode, api.ServiceName)
+	str := fmt.Sprint(api.APIUrl, " ", api.StatusCode, " ", api.ServiceName)
 
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
 	messages = append(messages, str)
-	_, err = w.Write([]byte("hello"))
+	_, err = w.Write([]byte(str))
 	if err != nil {
 		log.Printf("couldnt write response error [%s]\n", err)
 	} else {
