@@ -396,7 +396,3 @@ type AlertData struct {
 	Url         Url         `json:"url"`
 	UserAgent   UserAgent   `json:"user_agent"`
 }
-
-type Test struct {
-	AlertData AlertData `json:"alert_data"`
-}
