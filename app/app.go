@@ -51,18 +51,22 @@ type ServiceData struct {
 }
 
 func customQueryAlert(w http.ResponseWriter, r *http.Request) {
-	var body test
+	var body interface{}
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		messages = append(messages, err.Error())
 	}
 
+	bytes, err := json.Marshal(body)
+
+	data := test{}
+	err = json.Unmarshal(bytes, &data)
 	api := ServiceData{}
 
-	api.ServiceName = body.AlertData.Service.Name
-	api.StatusCode = body.AlertData.Http.Response.StatusCode
-	api.APIUrl = body.AlertData.Url.Full
+	api.ServiceName = data.AlertData.Service.Name
+	api.StatusCode = data.AlertData.Http.Response.StatusCode
+	api.APIUrl = data.AlertData.Url.Full
 
 	str := fmt.Sprint(api.APIUrl, " ", api.StatusCode, " ", api.ServiceName)
 
