@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/mitchellh/mapstructure"
 	"log"
 	"net/http"
 	"strconv"
@@ -14,12 +15,6 @@ const serviceRoute = "/demo/project"
 var srv *http.Server
 var messages []string
 var count int
-
-type message struct {
-	ServiceName     string `json:"service_name"`
-	Reason          string `json:"reason"`
-	TransactionType string `json:"transaction_type"`
-}
 
 // Start starts the http server
 func Start() {
@@ -35,8 +30,7 @@ func Start() {
 func createServer() {
 	r := mux.NewRouter().StrictSlash(true)
 	r.HandleFunc(serviceRoute+"/printmsg", printMsg).Methods("GET")
-	r.HandleFunc(serviceRoute+"/alert", alert).Methods("POST")
-	r.HandleFunc(serviceRoute+"/customquery/alert", customeQueryAlert).Methods("POST")
+	r.HandleFunc(serviceRoute+"/customquery/alert", customQueryAlert).Methods("POST")
 	log.Fatal(http.ListenAndServe(":8080", r))
 }
 
@@ -49,60 +43,59 @@ func printMsg(w http.ResponseWriter, r *http.Request) {
 		}
 	}
 }
-func alert(w http.ResponseWriter, r *http.Request) {
-	msg := message{}
-	err := json.NewDecoder(r.Body).Decode(&msg)
-	str := fmt.Sprintf(msg.ServiceName, msg.Reason, msg.TransactionType)
-	if len(messages) > 2 {
-		messages = make([]string, 0)
-	}
-	messages = append(messages, str)
-	_, err = w.Write([]byte(str))
-	if err != nil {
-		log.Printf("couldnt write response error [%s]\n", err)
-	} else {
-		log.Println(str)
-	}
+
+type ServiceData struct {
+	ServiceName string
+	APIUrl      string
+	StatusCode  string
 }
 
-type custom struct {
-	AlertId              string `json:"alert_id"`
-	AlertActionGroup     string `json:"alert_action_group"`
-	AlertActionSubgroup  string `json:"alert_action_subgroup"`
-	AlertActionGroupName string `json:"alert_action_group_name"`
-	KibanaBaseUrl        string `json:"kibana_base_url"`
-	RuleId               string `json:"rule_id"`
-	RuleName             string `json:"rule_name"`
-	RuleDescription      string `json:"rule_description"`
-	TransactionName      string `json:"transaction_name"`
-	StatusCode           string `json:"status_code"`
-	UrlFull              string `json:"url_full"`
-}
-
-type test struct {
-	ResultLink string `json:"result_link,omitempty"`
-	//ResponseActions string `json:"response_actions,omitempty"`
-}
-
-func customeQueryAlert(w http.ResponseWriter, r *http.Request) {
-	count += 1
-	msg := test{}
-	err := json.NewDecoder(r.Body).Decode(&msg)
+func customQueryAlert(w http.ResponseWriter, r *http.Request) {
+	var body interface{}
+	var bodyData = make(map[string]interface{}, 0)
+	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		messages = append(messages, err.Error())
 	}
-	log.Println(msg)
-	//str := fmt.Sprintf("Alert : %s, RuleQuery : %s, RuleIndex : %s, ResultLink : %s, ResponseActions : %s", msg.Alerts, msg.RuleQuery, msg.RuleIndex,
-	//	msg.ResultLink, msg.ResponseActions)
-	str := fmt.Sprintf(msg.ResultLink + " count : " + strconv.Itoa(count))
+
+	mapstructure.Decode(body, &bodyData)
+	var api = ServiceData{}
+
+	data := bodyData["alert_data"].(map[string]interface{})
+	for i := 0; i < len(data); i++ {
+		if data["fields"] != nil {
+			valueMap := data["fields"].(map[string]interface{})
+			for key, value := range valueMap {
+				var str string
+				switch value.(type) {
+				case string:
+					str = fmt.Sprint(value)
+				case []interface{}:
+					for _, v := range value.([]interface{}) {
+						str = fmt.Sprint(v)
+						break
+					}
+				}
+				if key == "service.name" {
+					api.ServiceName = str
+				} else if key == "http.response.status_code" {
+					api.StatusCode = str
+				} else if key == "url.full" {
+					api.APIUrl = str
+				}
+			}
+		}
+	}
+	str := fmt.Sprint(api.APIUrl, api.StatusCode, api.ServiceName)
+
 	if len(messages) > 2 {
 		messages = make([]string, 0)
 	}
 	messages = append(messages, str)
-	_, err = w.Write([]byte(str))
+	_, err = w.Write([]byte("hello"))
 	if err != nil {
 		log.Printf("couldnt write response error [%s]\n", err)
 	} else {
-		log.Println(str)
+		log.Println("hello")
 	}
 }
