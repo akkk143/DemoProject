@@ -6,7 +6,6 @@ import (
 	"github.com/gorilla/mux"
 	"log"
 	"net/http"
-	"strconv"
 	"time"
 )
 
@@ -37,7 +36,6 @@ func createServer() {
 func printMsg(w http.ResponseWriter, r *http.Request) {
 	for _, m := range messages {
 		_, err := w.Write([]byte(m))
-		w.Write([]byte("count : " + strconv.Itoa(count) + "\n"))
 		if err != nil {
 			log.Printf("couldnt write response error [%s]\n", err)
 		}
@@ -60,17 +58,20 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 
 	bytes, err := json.Marshal(body)
 
+	messages = append(messages, fmt.Sprint(bytes))
+
 	data := test{}
 	err = json.Unmarshal(bytes, &data)
+	messages = append(messages, fmt.Sprint(data))
 	api := ServiceData{}
 
 	api.ServiceName = data.AlertData.Service.Name
 	api.StatusCode = data.AlertData.Http.Response.StatusCode
 	api.APIUrl = data.AlertData.Url.Full
 
-	str := fmt.Sprint(api.APIUrl, " ", api.StatusCode, " ", api.ServiceName)
+	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
 
-	if len(messages) > 2 {
+	if len(messages) > 5 {
 		messages = make([]string, 0)
 	}
 	messages = append(messages, str)
