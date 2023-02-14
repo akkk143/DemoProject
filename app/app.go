@@ -58,6 +58,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
+	messages = append(messages, body.(string))
 	mapstructure.Decode(body, &bodyData)
 	var api = ServiceData{}
 
