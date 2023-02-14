@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
+	"github.com/mitchellh/mapstructure"
 	"log"
 	"net/http"
 	"strconv"
@@ -51,14 +52,14 @@ type ServiceData struct {
 
 func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	var body interface{}
-	//var bodyData = make(map[string]interface{}, 0)
+	var bodyData = make(map[string]interface{}, 0)
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		messages = append(messages, err.Error())
 	}
-
 	messages = append(messages, fmt.Sprintf("%v", body))
-	//mapstructure.Decode(body, &bodyData)
+	mapstructure.Decode(body, &bodyData)
+	messages = append(messages, fmt.Sprintf("%v", bodyData))
 	//var api = ServiceData{}
 	//
 	//data := bodyData["alert_data"].(map[string]interface{})
