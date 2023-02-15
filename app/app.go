@@ -56,7 +56,20 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
-	messages = append(messages, fmt.Sprint(body))
+	switch body.(type) {
+	case map[string]interface{}:
+		messages = append(messages, "map[string]interface{}")
+	case interface{}:
+		messages = append(messages, "map[string]interface{}")
+	case map[string]string:
+		messages = append(messages, "map[string]string")
+	case map[string]json.RawMessage:
+		messages = append(messages, "map[string]json.RawMessage")
+	default:
+		messages = append(messages, "unknown")
+	}
+
+	messages = append(messages)
 
 	m := body.(map[string]interface{})
 	//log.Println(m)
@@ -65,6 +78,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 
 	log.Println(body)
 	if data, ok := m["alert_data"].(interface{}); ok {
+		messages = append(messages, fmt.Sprint(data))
 		bytes, err := json.Marshal(data)
 		if err != nil {
 			messages = append(messages, err.Error())
