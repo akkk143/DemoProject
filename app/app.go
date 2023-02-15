@@ -51,7 +51,6 @@ type ServiceData struct {
 func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	var body interface{}
 
-	alertData := model.AlertData{}
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		messages = append(messages, err.Error())
@@ -60,8 +59,11 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	mp := body.(map[string]interface{})
 
 	data := mp["alert_data"]
-	messages = append(messages, fmt.Sprint(data))
-	alertData = data.(model.AlertData)
+	//messages = append(messages, fmt.Sprint(data))
+	alertData, ok := data.(model.AlertData)
+	if ok {
+		messages = append(messages, alertData.Service.Name)
+	}
 
 	api := ServiceData{}
 	//
