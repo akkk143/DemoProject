@@ -80,7 +80,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		case interface{}:
 			messages = append(messages, "data interface{}")
 			messages = append(messages, fmt.Sprint(v))
-			s, _ := json.MarshalIndent(v, "", "\t")
+			s, _ := json.Marshal(v)
 			messages = append(messages, string(s))
 			//for key, value := range v.(map[string]interface{}) {
 			//	if key == "service" {
