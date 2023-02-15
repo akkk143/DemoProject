@@ -1,6 +1,7 @@
 package app
 
 import (
+	"DemoProject/model"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -74,14 +75,23 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	api := ServiceData{}
 
 	if data, ok := m["alert_data"]; ok {
-		switch v := data.(type) {
+		switch data.(type) {
 		case map[string]interface{}:
 			messages = append(messages, "data map[string]interface{}")
 		case interface{}:
 			messages = append(messages, "data interface{}")
-			messages = append(messages, fmt.Sprint(v))
-			s, _ := json.Marshal(v)
-			messages = append(messages, string(s))
+
+			b, err := json.Marshal(data)
+			if err != nil {
+				messages = append(messages, "service value marshaling failed")
+			}
+			txn := model.Test{}
+			err = json.Unmarshal(b, &txn)
+			if err != nil {
+				messages = append(messages, "service value un marshaling failed")
+			}
+			api.APIUrl = txn.Url.Full
+			api.StatusCode = txn.Http.Response.StatusCode
 			//for key, value := range v.(map[string]interface{}) {
 			//	if key == "service" {
 			//		b, err := json.Marshal(value)
