@@ -126,7 +126,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 				//}
 			}
 		case interface{}:
-			messages = append(messages, "data map[string]interface{}")
+			messages = append(messages, "data interface{}")
 		case map[string]string:
 			messages = append(messages, "data map[string]string")
 		case map[string]json.RawMessage:
