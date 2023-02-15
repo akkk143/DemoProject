@@ -59,10 +59,11 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	messages = append(messages, fmt.Sprint(body.(map[string]interface{})["alert_data"]))
 
 	m := body.(map[string]interface{})
-	alertData := model.AlertData{}
-	if data, ok := m["alert_data"].(model.AlertData); ok {
-		messages = append(messages, fmt.Sprint(data))
-		alertData = data
+	//log.Println(m)
+	alertData := model.Alerts{}
+	if data, ok := m["alert_data"].(interface{}); ok {
+		bytes, _ := json.Marshal(data)
+		err = json.Unmarshal(bytes, &alertData)
 	}
 	api := ServiceData{}
 	//
