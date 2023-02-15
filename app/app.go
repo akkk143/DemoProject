@@ -81,16 +81,8 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		case interface{}:
 			messages = append(messages, "data interface{}")
 			messages = append(messages, fmt.Sprint(v))
-			b, err := json.Marshal(v)
-			if err != nil {
-				messages = append(messages, fmt.Sprint(v))
-			}
-			mm := make(map[string]interface{}, 0)
-			err = json.Unmarshal(b, &mm)
-			if err != nil {
-				messages = append(messages, fmt.Sprint(v))
-			}
-			for key, value := range mm {
+
+			for key, value := range v.(map[string]interface{}) {
 				if key == "service" {
 					b, err := json.Marshal(value)
 					if err != nil {
@@ -136,6 +128,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 					}
 					api.APIUrl = txn.Name
 				}
+				messages = append(messages, "out of the for loop")
 			}
 		case map[string]string:
 			messages = append(messages, "data map[string]string")
