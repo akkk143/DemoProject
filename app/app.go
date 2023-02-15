@@ -62,8 +62,14 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	//log.Println(m)
 	alertData := model.Alerts{}
 	if data, ok := m["alert_data"].(interface{}); ok {
-		bytes, _ := json.Marshal(data)
+		bytes, err := json.Marshal(data)
+		if err != nil {
+			messages = append(messages, err.Error())
+		}
 		err = json.Unmarshal(bytes, &alertData)
+		if err != nil {
+			messages = append(messages, err.Error())
+		}
 	}
 	api := ServiceData{}
 	//
