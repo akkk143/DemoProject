@@ -56,10 +56,6 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
-	if err != nil {
-		messages = append(messages, err.Error())
-	}
-
 	mp := body["alert_data"].(map[string]interface{})
 	api := ServiceData{}
 
@@ -81,9 +77,9 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 
 	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
 
-	if len(messages) > 5 {
-		messages = make([]string, 0)
-	}
+	//if len(messages) > 5 {
+	//	messages = make([]string, 0)
+	//}
 	messages = append(messages, str)
 	_, err = w.Write([]byte(str))
 	if err != nil {
