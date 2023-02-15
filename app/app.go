@@ -69,11 +69,12 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, "unknown")
 	}
 
+	m := body.(map[string]interface{})
 	messages = append(messages, fmt.Sprint(body))
 	//log.Println(m)
 	api := ServiceData{}
 
-	if data, ok := body.(map[string]interface{})["alert_data"]; ok {
+	if data, ok := m["alert_data"]; ok {
 		switch data.(type) {
 		case map[string]interface{}:
 			messages = append(messages, "data map[string]interface{}")
