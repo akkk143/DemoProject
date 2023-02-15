@@ -74,6 +74,18 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	api := ServiceData{}
 
 	if data, ok := body.(map[string]interface{})["alert_data"]; ok {
+		switch data.(type) {
+		case map[string]interface{}:
+			messages = append(messages, "data map[string]interface{}")
+		case interface{}:
+			messages = append(messages, "data map[string]interface{}")
+		case map[string]string:
+			messages = append(messages, "data map[string]string")
+		case map[string]json.RawMessage:
+			messages = append(messages, "data map[string]json.RawMessage")
+		default:
+			messages = append(messages, "data unknown")
+		}
 
 		if d, ok := data.(map[string]interface{}); ok {
 			for key, value := range d {
@@ -124,11 +136,11 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 				}
 			}
 		} else {
-			messages = append(messages, "data, ok := body.(map[string]interface{})[\"alert_data\"]; ok ")
+			messages = append(messages, "d, ok := data.(map[string]interface{}); ok ")
 		}
 
 	} else {
-		messages = append(messages, "d, ok := data.(map[string]interface{}); ok ")
+		messages = append(messages, "data, ok := body.(map[string]interface{})[\"alert_data\"]; ok ")
 	}
 
 	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
