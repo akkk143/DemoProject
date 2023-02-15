@@ -397,7 +397,7 @@ type AlertDatas struct {
 	UserAgent   UserAgent   `json:"user_agent"`
 }
 
-type Alerts struct {
+type DataAlert struct {
 	Signal struct {
 		Depth         int `json:"depth"`
 		OriginalEvent struct {
@@ -407,7 +407,7 @@ type Alerts struct {
 		Reason       string `json:"reason"`
 		Rule         struct {
 			Author         []interface{} `json:"author"`
-			CreatedAt      time.Time     `json:"created_at"`
+			CreatedAt      string        `json:"created_at"`
 			CreatedBy      string        `json:"created_by"`
 			Description    string        `json:"description"`
 			Enabled        bool          `json:"enabled"`
@@ -426,7 +426,7 @@ type Alerts struct {
 			Tags           []interface{} `json:"tags"`
 			To             string        `json:"to"`
 			Type           string        `json:"type"`
-			UpdatedAt      time.Time     `json:"updated_at"`
+			UpdatedAt      string        `json:"updated_at"`
 			UpdatedBy      string        `json:"updated_by"`
 			Version        int           `json:"version"`
 		} `json:"rule"`
@@ -496,7 +496,7 @@ type Alerts struct {
 					ActionTypeId string `json:"action_type_id"`
 				} `json:"actions"`
 				Author           []interface{} `json:"author"`
-				CreatedAt        time.Time     `json:"created_at"`
+				CreatedAt        string        `json:"created_at"`
 				CreatedBy        string        `json:"created_by"`
 				Description      string        `json:"description"`
 				Enabled          bool          `json:"enabled"`
@@ -520,7 +520,7 @@ type Alerts struct {
 				Threat    []interface{} `json:"threat"`
 				To        string        `json:"to"`
 				Type      string        `json:"type"`
-				UpdatedAt time.Time     `json:"updated_at"`
+				UpdatedAt string        `json:"updated_at"`
 				UpdatedBy string        `json:"updated_by"`
 				Version   int           `json:"version"`
 				Meta      struct {
@@ -544,9 +544,9 @@ type Alerts struct {
 			Severity       string `json:"severity"`
 			RiskScore      int    `json:"risk_score"`
 			OriginalEvent  struct {
-				AgentIdStatus string    `json:"agent_id_status"`
-				Ingested      time.Time `json:"ingested"`
-				Outcome       string    `json:"outcome"`
+				AgentIdStatus string `json:"agent_id_status"`
+				Ingested      string `json:"ingested"`
+				Outcome       string `json:"outcome"`
 			} `json:"original_event"`
 			Suppression struct {
 				Terms []struct {
@@ -561,10 +561,14 @@ type Alerts struct {
 		} `json:"alert"`
 		SpaceIds []string `json:"space_ids"`
 	} `json:"kibana"`
-	Timestamp string `json:"timestamp"`
+	Timestamp string `json:"@timestamp"`
 	Parent    struct {
 		Id string `json:"id"`
 	} `json:"parent"`
+	Agent struct {
+		Name    string `json:"name"`
+		Version string `json:"version"`
+	} `json:"agent"`
 	Process struct {
 		Args   []string `json:"args"`
 		Parent struct {
@@ -573,10 +577,6 @@ type Alerts struct {
 		Pid   int    `json:"pid"`
 		Title string `json:"title"`
 	} `json:"process"`
-	Agent struct {
-		Name    string `json:"name"`
-		Version string `json:"version"`
-	} `json:"agent"`
 	DataStream struct {
 		Namespace string `json:"namespace"`
 		Type      string `json:"type"`
@@ -627,6 +627,9 @@ type Alerts struct {
 		Name         string   `json:"name"`
 		Architecture string   `json:"architecture"`
 	} `json:"host"`
+	Client struct {
+		Ip string `json:"ip"`
+	} `json:"client"`
 	Http struct {
 		Request struct {
 			Headers struct {
@@ -634,23 +637,23 @@ type Alerts struct {
 				Origin          []string `json:"Origin"`
 				SecChUa         []string `json:"Sec-Ch-Ua"`
 				Email           []string `json:"Email"`
-				Requestid       []string `json:"Requestid"`
 				Accept          []string `json:"Accept"`
+				Requestid       []string `json:"Requestid"`
 				Authority       []string `json:"Authority"`
 				SecChUaPlatform []string `json:"Sec-Ch-Ua-Platform"`
-				Connection      []string `json:"Connection"`
-				Referer         []string `json:"Referer"`
 				UserAgent       []string `json:"User-Agent"`
 				TapApiToken     []string `json:"Tap-Api-Token"`
-				SecFetchDest    []string `json:"Sec-Fetch-Dest"`
+				Connection      []string `json:"Connection"`
+				Referer         []string `json:"Referer"`
 				SecFetchSite    []string `json:"Sec-Fetch-Site"`
+				SecFetchDest    []string `json:"Sec-Fetch-Dest"`
 				AcceptEncoding  []string `json:"Accept-Encoding"`
 				Traceparent     []string `json:"Traceparent"`
 				SecFetchMode    []string `json:"Sec-Fetch-Mode"`
 				PostmanToken    []string `json:"Postman-Token"`
 				AcceptLanguage  []string `json:"Accept-Language"`
-				SecChUaMobile   []string `json:"Sec-Ch-Ua-Mobile"`
 				ContentLength   []string `json:"Content-Length"`
+				SecChUaMobile   []string `json:"Sec-Ch-Ua-Mobile"`
 				ContentType     []string `json:"Content-Type"`
 			} `json:"headers"`
 			Method string `json:"method"`
@@ -667,22 +670,6 @@ type Alerts struct {
 		} `json:"response"`
 		Version string `json:"version"`
 	} `json:"http"`
-	Client struct {
-		Ip string `json:"ip"`
-	} `json:"client"`
-	UserAgent struct {
-		Original string `json:"original"`
-		Os       struct {
-			Name    string `json:"name"`
-			Version string `json:"version"`
-			Full    string `json:"full"`
-		} `json:"os"`
-		Name   string `json:"name"`
-		Device struct {
-			Name string `json:"name"`
-		} `json:"device"`
-		Version string `json:"version"`
-	} `json:"user_agent"`
 	Transaction struct {
 		Result   string `json:"result"`
 		Duration struct {
@@ -698,6 +685,19 @@ type Alerts struct {
 		Type    string `json:"type"`
 		Sampled bool   `json:"sampled"`
 	} `json:"transaction"`
+	UserAgent struct {
+		Original string `json:"original"`
+		Os       struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+			Full    string `json:"full"`
+		} `json:"os"`
+		Name   string `json:"name"`
+		Device struct {
+			Name string `json:"name"`
+		} `json:"device"`
+		Version string `json:"version"`
+	} `json:"user_agent"`
 	Timestamp1 struct {
 		Us int64 `json:"us"`
 	} `json:"timestamp"`
@@ -710,4 +710,319 @@ type Alerts struct {
 		Outcome       string `json:"outcome"`
 		Kind          string `json:"kind"`
 	} `json:"event"`
+}
+
+type T struct {
+	Timestamp time.Time `json:"@timestamp"`
+	Id        string    `json:"_id"`
+	Index     string    `json:"_index"`
+	Agent     struct {
+		Name    string `json:"name"`
+		Version string `json:"version"`
+	} `json:"agent"`
+	Client struct {
+		Ip string `json:"ip"`
+	} `json:"client"`
+	DataStream struct {
+		Dataset   string `json:"dataset"`
+		Namespace string `json:"namespace"`
+		Type      string `json:"type"`
+	} `json:"data_stream"`
+	Ecs struct {
+		Version string `json:"version"`
+	} `json:"ecs"`
+	Event struct {
+		AgentIdStatus string    `json:"agent_id_status"`
+		Ingested      time.Time `json:"ingested"`
+		Kind          string    `json:"kind"`
+		Outcome       string    `json:"outcome"`
+	} `json:"event"`
+	Host struct {
+		Architecture string   `json:"architecture"`
+		Hostname     string   `json:"hostname"`
+		Ip           []string `json:"ip"`
+		Name         string   `json:"name"`
+		Os           struct {
+			Platform string `json:"platform"`
+		} `json:"os"`
+	} `json:"host"`
+	Http struct {
+		Request struct {
+			Headers struct {
+				Accept          []string `json:"Accept"`
+				AcceptEncoding  []string `json:"Accept-Encoding"`
+				AcceptLanguage  []string `json:"Accept-Language"`
+				Authority       []string `json:"Authority"`
+				Connection      []string `json:"Connection"`
+				ContentLength   []string `json:"Content-Length"`
+				ContentType     []string `json:"Content-Type"`
+				Email           []string `json:"Email"`
+				Locale          []string `json:"Locale"`
+				Origin          []string `json:"Origin"`
+				PostmanToken    []string `json:"Postman-Token"`
+				Referer         []string `json:"Referer"`
+				Requestid       []string `json:"Requestid"`
+				SecChUa         []string `json:"Sec-Ch-Ua"`
+				SecChUaMobile   []string `json:"Sec-Ch-Ua-Mobile"`
+				SecChUaPlatform []string `json:"Sec-Ch-Ua-Platform"`
+				SecFetchDest    []string `json:"Sec-Fetch-Dest"`
+				SecFetchMode    []string `json:"Sec-Fetch-Mode"`
+				SecFetchSite    []string `json:"Sec-Fetch-Site"`
+				TapApiToken     []string `json:"Tap-Api-Token"`
+				Traceparent     []string `json:"Traceparent"`
+				UserAgent       []string `json:"User-Agent"`
+			} `json:"headers"`
+			Method string `json:"method"`
+		} `json:"request"`
+		Response struct {
+			Headers struct {
+				AccessControlAllowCredentials []string `json:"Access-Control-Allow-Credentials"`
+				AccessControlAllowOrigin      []string `json:"Access-Control-Allow-Origin"`
+				ContentEncoding               []string `json:"Content-Encoding"`
+				ContentType                   []string `json:"Content-Type"`
+				Traceid                       []string `json:"Traceid"`
+			} `json:"headers"`
+			StatusCode int `json:"status_code"`
+		} `json:"response"`
+		Version string `json:"version"`
+	} `json:"http"`
+	Kibana struct {
+		Alert struct {
+			Ancestors []struct {
+				Depth int    `json:"depth"`
+				Id    string `json:"id"`
+				Index string `json:"index"`
+				Type  string `json:"type"`
+			} `json:"ancestors"`
+			Depth         int `json:"depth"`
+			OriginalEvent struct {
+				AgentIdStatus string    `json:"agent_id_status"`
+				Ingested      time.Time `json:"ingested"`
+				Outcome       string    `json:"outcome"`
+			} `json:"original_event"`
+			OriginalTime time.Time `json:"original_time"`
+			Reason       string    `json:"reason"`
+			RiskScore    int       `json:"risk_score"`
+			Rule         struct {
+				Actions []struct {
+					ActionTypeId string `json:"action_type_id"`
+					Group        string `json:"group"`
+					Id           string `json:"id"`
+					Params       struct {
+						Body string `json:"body"`
+					} `json:"params"`
+				} `json:"actions"`
+				Author         []interface{} `json:"author"`
+				Category       string        `json:"category"`
+				Consumer       string        `json:"consumer"`
+				CreatedAt      time.Time     `json:"created_at"`
+				CreatedBy      string        `json:"created_by"`
+				Description    string        `json:"description"`
+				Enabled        bool          `json:"enabled"`
+				ExceptionsList []interface{} `json:"exceptions_list"`
+				Execution      struct {
+					Uuid string `json:"uuid"`
+				} `json:"execution"`
+				FalsePositives []interface{} `json:"false_positives"`
+				From           string        `json:"from"`
+				Immutable      bool          `json:"immutable"`
+				Indices        []string      `json:"indices"`
+				Interval       string        `json:"interval"`
+				License        string        `json:"license"`
+				MaxSignals     int           `json:"max_signals"`
+				Meta           struct {
+					From             string `json:"from"`
+					KibanaSiemAppUrl string `json:"kibana_siem_app_url"`
+				} `json:"meta"`
+				Name       string `json:"name"`
+				Parameters struct {
+					AlertSuppression struct {
+						GroupBy []string `json:"group_by"`
+					} `json:"alert_suppression"`
+					Author         []interface{} `json:"author"`
+					Description    string        `json:"description"`
+					ExceptionsList []interface{} `json:"exceptions_list"`
+					FalsePositives []interface{} `json:"false_positives"`
+					Filters        []interface{} `json:"filters"`
+					From           string        `json:"from"`
+					Immutable      bool          `json:"immutable"`
+					Index          []string      `json:"index"`
+					Language       string        `json:"language"`
+					License        string        `json:"license"`
+					MaxSignals     int           `json:"max_signals"`
+					Meta           struct {
+						From             string `json:"from"`
+						KibanaSiemAppUrl string `json:"kibana_siem_app_url"`
+					} `json:"meta"`
+					Query               string        `json:"query"`
+					References          []interface{} `json:"references"`
+					RelatedIntegrations []interface{} `json:"related_integrations"`
+					RequiredFields      []interface{} `json:"required_fields"`
+					RiskScore           int           `json:"risk_score"`
+					RiskScoreMapping    []interface{} `json:"risk_score_mapping"`
+					RuleId              string        `json:"rule_id"`
+					Setup               string        `json:"setup"`
+					Severity            string        `json:"severity"`
+					SeverityMapping     []struct {
+						Field    string `json:"field"`
+						Operator string `json:"operator"`
+						Severity string `json:"severity"`
+						Value    string `json:"value"`
+					} `json:"severity_mapping"`
+					Threat  []interface{} `json:"threat"`
+					To      string        `json:"to"`
+					Type    string        `json:"type"`
+					Version int           `json:"version"`
+				} `json:"parameters"`
+				Producer         string        `json:"producer"`
+				References       []interface{} `json:"references"`
+				RiskScore        int           `json:"risk_score"`
+				RiskScoreMapping []interface{} `json:"risk_score_mapping"`
+				RuleId           string        `json:"rule_id"`
+				RuleTypeId       string        `json:"rule_type_id"`
+				Severity         string        `json:"severity"`
+				SeverityMapping  []struct {
+					Field    string `json:"field"`
+					Operator string `json:"operator"`
+					Severity string `json:"severity"`
+					Value    string `json:"value"`
+				} `json:"severity_mapping"`
+				Tags      []interface{} `json:"tags"`
+				Threat    []interface{} `json:"threat"`
+				To        string        `json:"to"`
+				Type      string        `json:"type"`
+				UpdatedAt time.Time     `json:"updated_at"`
+				UpdatedBy string        `json:"updated_by"`
+				Uuid      string        `json:"uuid"`
+				Version   int           `json:"version"`
+			} `json:"rule"`
+			Severity    string `json:"severity"`
+			Status      string `json:"status"`
+			Suppression struct {
+				DocsCount int       `json:"docs_count"`
+				End       time.Time `json:"end"`
+				Start     time.Time `json:"start"`
+				Terms     []struct {
+					Field string      `json:"field"`
+					Value interface{} `json:"value"`
+				} `json:"terms"`
+			} `json:"suppression"`
+			Uuid           string `json:"uuid"`
+			WorkflowStatus string `json:"workflow_status"`
+		} `json:"alert"`
+		SpaceIds []string `json:"space_ids"`
+		Version  string   `json:"version"`
+	} `json:"kibana"`
+	Observer struct {
+		Hostname string `json:"hostname"`
+		Type     string `json:"type"`
+		Version  string `json:"version"`
+	} `json:"observer"`
+	Parent struct {
+		Id string `json:"id"`
+	} `json:"parent"`
+	Process struct {
+		Args   []string `json:"args"`
+		Parent struct {
+			Pid int `json:"pid"`
+		} `json:"parent"`
+		Pid   int    `json:"pid"`
+		Title string `json:"title"`
+	} `json:"process"`
+	Processor struct {
+		Event string `json:"event"`
+		Name  string `json:"name"`
+	} `json:"processor"`
+	Service struct {
+		Language struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+		} `json:"language"`
+		Name string `json:"name"`
+		Node struct {
+			Name string `json:"name"`
+		} `json:"node"`
+		Runtime struct {
+			Name    string `json:"name"`
+			Version string `json:"version"`
+		} `json:"runtime"`
+	} `json:"service"`
+	Signal struct {
+		Depth         int `json:"depth"`
+		OriginalEvent struct {
+			Outcome string `json:"outcome"`
+		} `json:"original_event"`
+		OriginalTime time.Time `json:"original_time"`
+		Reason       string    `json:"reason"`
+		Rule         struct {
+			Author         []interface{} `json:"author"`
+			CreatedAt      time.Time     `json:"created_at"`
+			CreatedBy      string        `json:"created_by"`
+			Description    string        `json:"description"`
+			Enabled        bool          `json:"enabled"`
+			FalsePositives []interface{} `json:"false_positives"`
+			From           string        `json:"from"`
+			Id             string        `json:"id"`
+			Immutable      bool          `json:"immutable"`
+			Interval       string        `json:"interval"`
+			License        string        `json:"license"`
+			MaxSignals     int           `json:"max_signals"`
+			Name           string        `json:"name"`
+			References     []interface{} `json:"references"`
+			RiskScore      int           `json:"risk_score"`
+			RuleId         string        `json:"rule_id"`
+			Severity       string        `json:"severity"`
+			Tags           []interface{} `json:"tags"`
+			To             string        `json:"to"`
+			Type           string        `json:"type"`
+			UpdatedAt      time.Time     `json:"updated_at"`
+			UpdatedBy      string        `json:"updated_by"`
+			Version        int           `json:"version"`
+		} `json:"rule"`
+		Status string `json:"status"`
+	} `json:"signal"`
+	Source struct {
+		Ip string `json:"ip"`
+	} `json:"source"`
+	Timestamp1 struct {
+		Us int64 `json:"us"`
+	} `json:"timestamp"`
+	Trace struct {
+		Id string `json:"id"`
+	} `json:"trace"`
+	Transaction struct {
+		Duration struct {
+			Us int `json:"us"`
+		} `json:"duration"`
+		Id                  string `json:"id"`
+		Name                string `json:"name"`
+		RepresentativeCount int    `json:"representative_count"`
+		Result              string `json:"result"`
+		Sampled             bool   `json:"sampled"`
+		SpanCount           struct {
+			Dropped int `json:"dropped"`
+			Started int `json:"started"`
+		} `json:"span_count"`
+		Type string `json:"type"`
+	} `json:"transaction"`
+	Url struct {
+		Domain string `json:"domain"`
+		Full   string `json:"full"`
+		Path   string `json:"path"`
+		Port   int    `json:"port"`
+		Scheme string `json:"scheme"`
+	} `json:"url"`
+	UserAgent struct {
+		Device struct {
+			Name string `json:"name"`
+		} `json:"device"`
+		Name     string `json:"name"`
+		Original string `json:"original"`
+		Os       struct {
+			Full    string `json:"full"`
+			Name    string `json:"name"`
+			Version string `json:"version"`
+		} `json:"os"`
+		Version string `json:"version"`
+	} `json:"user_agent"`
 }
