@@ -74,6 +74,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	if err != nil {
 		messages = append(messages, err.Error())
 	}
+	messages = append(messages, fmt.Sprint(data))
 	api.ServiceName = data.Service.Name
 	api.StatusCode = data.Http.Response.StatusCode
 	api.APIUrl = data.Url.Full
