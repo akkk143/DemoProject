@@ -77,56 +77,54 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		switch v := data.(type) {
 		case map[string]interface{}:
 			messages = append(messages, "data map[string]interface{}")
-			for key, _ := range v {
-				messages = append(messages, key)
-				////if key == "service" {
-				////	b, err := json.Marshal(value)
-				////	if err != nil {
-				////		messages = append(messages, "service value marshaling failed")
-				////	}
-				////	service := model.Service{}
-				////	err = json.Unmarshal(b, &service)
-				////	if err != nil {
-				////		messages = append(messages, "service value un marshaling failed")
-				////	}
-				////	api.ServiceName = service.Name
-				////} else if key == "url" {
-				////	b, err := json.Marshal(value)
-				////	if err != nil {
-				////		messages = append(messages, "url value marshaling failed")
-				////	}
-				////	url := model.Url{}
-				////	err = json.Unmarshal(b, &url)
-				////	if err != nil {
-				////		messages = append(messages, "url value un marshaling failed")
-				////	}
-				////	api.TransactionUrl = url.Full
-				////} else if key == "http" {
-				////	b, err := json.Marshal(value)
-				////	if err != nil {
-				////		messages = append(messages, "http value marshaling failed")
-				////	}
-				////	http := model.Http{}
-				////	err = json.Unmarshal(b, &http)
-				////	if err != nil {
-				////		messages = append(messages, "url value un marshaling failed")
-				////	}
-				////	api.StatusCode = http.Response.StatusCode
-				//} else if key == "transaction" {
-				//	b, err := json.Marshal(value)
-				//	if err != nil {
-				//		messages = append(messages, "transaction value marshaling failed")
-				//	}
-				//	txn := model.Transaction{}
-				//	err = json.Unmarshal(b, &txn)
-				//	if err != nil {
-				//		messages = append(messages, "transaction value un marshaling failed")
-				//	}
-				//	api.APIUrl = txn.Name
-				//}
-			}
 		case interface{}:
 			messages = append(messages, "data interface{}")
+			messages = append(messages, fmt.Sprint(v))
+			//if key == "service" {
+			//	b, err := json.Marshal(value)
+			//	if err != nil {
+			//		messages = append(messages, "service value marshaling failed")
+			//	}
+			//	service := model.Service{}
+			//	err = json.Unmarshal(b, &service)
+			//	if err != nil {
+			//		messages = append(messages, "service value un marshaling failed")
+			//	}
+			//	api.ServiceName = service.Name
+			//} else if key == "url" {
+			//	b, err := json.Marshal(value)
+			//	if err != nil {
+			//		messages = append(messages, "url value marshaling failed")
+			//	}
+			//	url := model.Url{}
+			//	err = json.Unmarshal(b, &url)
+			//	if err != nil {
+			//		messages = append(messages, "url value un marshaling failed")
+			//	}
+			//	api.TransactionUrl = url.Full
+			//} else if key == "http" {
+			//	b, err := json.Marshal(value)
+			//	if err != nil {
+			//		messages = append(messages, "http value marshaling failed")
+			//	}
+			//	http := model.Http{}
+			//	err = json.Unmarshal(b, &http)
+			//	if err != nil {
+			//		messages = append(messages, "url value un marshaling failed")
+			//	}
+			//	api.StatusCode = http.Response.StatusCode
+			//} else if key == "transaction" {
+			//	b, err := json.Marshal(value)
+			//	if err != nil {
+			//		messages = append(messages, "transaction value marshaling failed")
+			//	}
+			//	txn := model.Transaction{}
+			//	err = json.Unmarshal(b, &txn)
+			//	if err != nil {
+			//		messages = append(messages, "transaction value un marshaling failed")
+			//	}
+			//	api.APIUrl = txn.Name
+			//}
 		case map[string]string:
 			messages = append(messages, "data map[string]string")
 		case map[string]json.RawMessage:
