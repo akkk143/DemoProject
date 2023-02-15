@@ -1,7 +1,6 @@
 package app
 
 import (
-	"DemoProject/model"
 	"encoding/json"
 	"fmt"
 	"github.com/gorilla/mux"
@@ -49,37 +48,41 @@ type ServiceData struct {
 }
 
 func customQueryAlert(w http.ResponseWriter, r *http.Request) {
-	var body map[string]interface{}
+	var body interface{}
 
 	err := json.NewDecoder(r.Body).Decode(&body)
 	if err != nil {
 		messages = append(messages, err.Error())
 	}
 
-	mp := body["alert_data"].(map[string]interface{})
-	api := ServiceData{}
+	mp := body.(map[string]interface{})
 
-	bytes, err := json.Marshal(mp)
-
-	if err != nil {
-		messages = append(messages, err.Error())
-	}
-
-	data := model.AlertData{}
-	err = json.Unmarshal(bytes, &data)
-	if err != nil {
-		messages = append(messages, err.Error())
-	}
+	data := mp["alert_data"]
 	messages = append(messages, fmt.Sprint(data))
-	api.ServiceName = data.Service.Name
-	api.StatusCode = data.Http.Response.StatusCode
-	api.APIUrl = data.Url.Full
+	//api := ServiceData{}
+	//
+	//bytes, err := json.Marshal(mp)
+	//
+	//if err != nil {
+	//	messages = append(messages, err.Error())
+	//}
+	//
+	//data := model.AlertData{}
+	//err = json.Unmarshal(bytes, &data)
+	//if err != nil {
+	//	messages = append(messages, err.Error())
+	//}
+	//messages = append(messages, fmt.Sprint(data))
+	//api.ServiceName = data.Service.Name
+	//api.StatusCode = data.Http.Response.StatusCode
+	//api.APIUrl = data.Url.Full
 
-	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
+	//str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
 
 	//if len(messages) > 5 {
 	//	messages = make([]string, 0)
 	//}
+	str := ""
 	messages = append(messages, str)
 	_, err = w.Write([]byte(str))
 	if err != nil {
