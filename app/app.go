@@ -17,7 +17,6 @@ var count int
 
 // Start starts the http server
 func Start() {
-	messages = append(messages, "Hello World!")
 	count = 0
 	createServer()
 	if err := srv.ListenAndServe(); err != nil && err != http.ErrServerClosed {
@@ -36,6 +35,7 @@ func createServer() {
 func printMsg(w http.ResponseWriter, r *http.Request) {
 	for _, m := range messages {
 		_, err := w.Write([]byte(m))
+		_, err = w.Write([]byte("\n\n\n"))
 		if err != nil {
 			log.Printf("couldnt write response error [%s]\n", err)
 		}
@@ -56,11 +56,14 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
-	messages = append(messages, fmt.Sprint(body.(map[string]interface{})["alert_data"]))
+	messages = append(messages, fmt.Sprint(body))
 
 	m := body.(map[string]interface{})
 	//log.Println(m)
 	alertData := model.Alerts{}
+	api := ServiceData{}
+
+	log.Println(body)
 	if data, ok := m["alert_data"].(interface{}); ok {
 		bytes, err := json.Marshal(data)
 		if err != nil {
@@ -71,20 +74,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 			messages = append(messages, err.Error())
 		}
 	}
-	api := ServiceData{}
-	//
-	//bytes, err := json.Marshal(mp)
-	//
-	//if err != nil {
-	//	messages = append(messages, err.Error())
-	//}
-	//
-	//data := model.AlertData{}
-	//err = json.Unmarshal(bytes, &data)
-	//if err != nil {
-	//	messages = append(messages, err.Error())
-	//}
-	//messages = append(messages, fmt.Sprint(data))
+
 	api.ServiceName = alertData.Service.Name
 	api.StatusCode = alertData.Http.Response.StatusCode
 	api.APIUrl = alertData.Url.Full

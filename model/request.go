@@ -561,7 +561,7 @@ type AlertData struct {
 		} `json:"alert"`
 		SpaceIds []string `json:"space_ids"`
 	} `json:"kibana"`
-	Timestamp time.Time `json:"@timestamp"`
+	Timestamp string `json:"timestamp"`
 	Parent    struct {
 		Id string `json:"id"`
 	} `json:"parent"`
@@ -713,9 +713,9 @@ type AlertData struct {
 }
 
 type Alerts struct {
-	Timestamp time.Time `json:"@timestamp"`
-	Id        string    `json:"_id"`
-	Index     string    `json:"_index"`
+	Timestamp string `json:"timestamp"`
+	Id        string `json:"_id"`
+	Index     string `json:"_index"`
 	Agent     struct {
 		Name    string `json:"name"`
 		Version string `json:"version"`
