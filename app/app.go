@@ -76,7 +76,7 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 	} else {
 		messages = append(messages, "could not convert data to string")
 	}
-	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
+	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName, " , ", api.TransactionUrl)
 	messages = append(messages, str)
 	_, err = w.Write([]byte(str))
 	if err != nil {
