@@ -156,7 +156,7 @@ type AlertData struct {
 			Suppression struct {
 				Terms []struct {
 					Field string `json:"field,omitempty"`
-					Value string `json:"value,omitempty"`
+					Value int64  `json:"value,omitempty"`
 				} `json:"terms,omitempty"`
 				Start     time.Time `json:"start,omitempty"`
 				End       time.Time `json:"end,omitempty"`
