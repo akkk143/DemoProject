@@ -56,104 +56,18 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 		messages = append(messages, err.Error())
 	}
 
-	switch body.(type) {
-	case map[string]interface{}:
-		messages = append(messages, "map[string]interface{}")
-	case interface{}:
-		messages = append(messages, "map[string]interface{}")
-	case map[string]string:
-		messages = append(messages, "map[string]string")
-	case map[string]json.RawMessage:
-		messages = append(messages, "map[string]json.RawMessage")
-	default:
-		messages = append(messages, "unknown")
-	}
-
-	m := body.(map[string]interface{})
 	messages = append(messages, fmt.Sprint(body))
-	//log.Println(m)
+
+	data := body.(map[string]interface{})["alert_data"]
+
 	api := ServiceData{}
 
-	if data, ok := m["alert_data"]; ok {
-		switch data.(type) {
-		case map[string]interface{}:
-			messages = append(messages, "data map[string]interface{}")
-		case interface{}:
-			messages = append(messages, "data interface{}")
-
-			b, err := json.Marshal(data)
-			if err != nil {
-				messages = append(messages, "service value marshaling failed")
-			}
-			txn := model.Test{}
-			err = json.Unmarshal(b, &txn)
-			if err != nil {
-				messages = append(messages, "service value un marshaling failed")
-			}
-			api.APIUrl = txn.Url.Full
-			api.StatusCode = txn.Http.Response.StatusCode
-			//for key, value := range v.(map[string]interface{}) {
-			//	if key == "service" {
-			//		b, err := json.Marshal(value)
-			//		if err != nil {
-			//			messages = append(messages, "service value marshaling failed")
-			//		}
-			//		service := model.Service{}
-			//		err = json.Unmarshal(b, &service)
-			//		if err != nil {
-			//			messages = append(messages, "service value un marshaling failed")
-			//		}
-			//		api.ServiceName = service.Name
-			//	} else if key == "url" {
-			//		b, err := json.Marshal(value)
-			//		if err != nil {
-			//			messages = append(messages, "url value marshaling failed")
-			//		}
-			//		url := model.Url{}
-			//		err = json.Unmarshal(b, &url)
-			//		if err != nil {
-			//			messages = append(messages, "url value un marshaling failed")
-			//		}
-			//		api.TransactionUrl = url.Full
-			//	} else if key == "http" {
-			//		b, err := json.Marshal(value)
-			//		if err != nil {
-			//			messages = append(messages, "http value marshaling failed")
-			//		}
-			//		http := model.Http{}
-			//		err = json.Unmarshal(b, &http)
-			//		if err != nil {
-			//			messages = append(messages, "url value un marshaling failed")
-			//		}
-			//		api.StatusCode = http.Response.StatusCode
-			//	} else if key == "transaction" {
-			//		b, err := json.Marshal(value)
-			//		if err != nil {
-			//			messages = append(messages, "transaction value marshaling failed")
-			//		}
-			//		txn := model.Transaction{}
-			//		err = json.Unmarshal(b, &txn)
-			//		if err != nil {
-			//			messages = append(messages, "transaction value un marshaling failed")
-			//		}
-			//		api.APIUrl = txn.Name
-			//	}
-			//	messages = append(messages, "out of the for loop")
-			//}
-		case map[string]string:
-			messages = append(messages, "data map[string]string")
-		case map[string]json.RawMessage:
-			messages = append(messages, "data map[string]json.RawMessage")
-		default:
-			messages = append(messages, "data unknown")
-		}
-
+	if d, ok := data.(model.AlertData); ok {
+		api.TransactionUrl = d.Transaction.Name
 	} else {
-		messages = append(messages, "data, ok := body.(map[string]interface{})[\"alert_data\"]; ok ")
+		messages = append(messages, "could not convert data to model.AlertData")
 	}
-
 	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
-
 	messages = append(messages, str)
 	_, err = w.Write([]byte(str))
 	if err != nil {
