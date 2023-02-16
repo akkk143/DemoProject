@@ -62,10 +62,16 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 
 	api := ServiceData{}
 
-	if d, ok := data.(model.AlertData); ok {
-		api.TransactionUrl = d.Transaction.Name
+	alertData := model.AlertData{}
+	if d, ok := data.(string); ok {
+
+		err = json.Unmarshal([]byte(d), &alertData)
+		if err != nil {
+			messages = append(messages, err.Error())
+		}
+		api.TransactionUrl = alertData.Transaction.Name
 	} else {
-		messages = append(messages, "could not convert data to model.AlertData")
+		messages = append(messages, "could not convert data to string")
 	}
 	str := fmt.Sprint(api.APIUrl, " , ", api.StatusCode, " , ", api.ServiceName)
 	messages = append(messages, str)
