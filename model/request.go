@@ -1,6 +1,9 @@
 package model
 
-import "time"
+import (
+	"encoding/json"
+	"time"
+)
 
 type AlertData struct {
 	Signal struct {
@@ -155,8 +158,8 @@ type AlertData struct {
 			} `json:"original_event,omitempty"`
 			Suppression struct {
 				Terms []struct {
-					Field string `json:"field,omitempty"`
-					Value string `json:"value,omitempty"`
+					Field string      `json:"field,omitempty"`
+					Value json.Number `json:"value,omitempty"`
 				} `json:"terms,omitempty"`
 				Start     time.Time `json:"start,omitempty"`
 				End       time.Time `json:"end,omitempty"`
