@@ -70,6 +70,9 @@ func customQueryAlert(w http.ResponseWriter, r *http.Request) {
 			messages = append(messages, err.Error())
 		}
 		api.TransactionUrl = alertData.Transaction.Name
+		api.APIUrl = alertData.URL.Full
+		api.StatusCode = alertData.HTTP.Response.StatusCode
+		api.ServiceName = alertData.Service.Name
 	} else {
 		messages = append(messages, "could not convert data to string")
 	}
